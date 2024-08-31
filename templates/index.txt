@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejecutar Docker desde HTML con Flask</title>
+</head>
+<body>
+    <h1>Ejecutar Docker desde HTML</h1>
+    <form id="dockerForm" enctype="multipart/form-data">
+        <label for="file">Selecciona una imagen:</label>
+        <input type="file" id="file" name="file" required><br><br>
+        <label for="dockerTag">Etiqueta de Docker:</label>
+        <input type="text" id="dockerTag" name="dockerTag" required><br><br>
+        <button type="submit">Ejecutar</button>
+    </form>
+    <br>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('dockerForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(document.getElementById('dockerForm'));
+            
+            const response = await fetch('/run-docker', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                document.getElementById('result').innerText = `Resultado: ${data.result}`;
+            } else {
+                document.getElementById('result').innerText = `Error: ${data.error}`;
+            }
+        });
+    </script>
+</body>
+</html>

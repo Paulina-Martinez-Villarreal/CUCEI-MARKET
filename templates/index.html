@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Run Docker with Image</title>
+</head>
+<body>
+    <h1>Upload an Image and Run Docker</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <label for="dockerTag">Docker Tag:</label>
+        <input type="text" id="dockerTag" name="dockerTag" value="tesseract:0.1" required><br><br>
+        
+        <label for="file">Select image:</label>
+        <input type="file" id="file" name="file" required><br><br>
+        
+        <input type="submit" value="Ejecutar">
+    </form>
+
+    <br>
+
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('uploadForm').onsubmit = function(event) {
+            event.preventDefault(); // Evita que se recargue la página al enviar el formulario
+            
+            const formData = new FormData(this);
+            const dockerTag = document.getElementById('dockerTag').value;
+            formData.append('dockerTag', dockerTag);
+
+            fetch('/run-docker', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = `<pre>${data.result}</pre>`;
+                
+                if (data.found === "TRUE") {
+                    resultDiv.innerHTML += "<p><strong>TRUE</strong></p>";
+                } else {
+                    resultDiv.innerHTML += "<p><strong>FALSE</strong></p>";
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
