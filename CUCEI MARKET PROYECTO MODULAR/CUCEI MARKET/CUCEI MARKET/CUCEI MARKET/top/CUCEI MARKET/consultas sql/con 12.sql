@@ -1,0 +1,1 @@
+SELECT id, nombre_completo, correo, rol FROM usuarios WHERE correo = 'paulina.mvillarreal@alumnos.udg.mx';

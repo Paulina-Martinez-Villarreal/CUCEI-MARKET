@@ -1,0 +1,1 @@
+SELECT rol FROM usuarios WHERE correo = 'paulina.mvillarreal@alumnos.udg.mx';
